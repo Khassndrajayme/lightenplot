@@ -1,0 +1,2 @@
+# PlotEase
+Our library addresses the common problem of complex coding processes required for data plotting and visualization. Many existing solutions demand extensive manual coding, creating a barrier for users who simply want to generate insightful plots quickly and efficiently. The library addresses the complex coding often needed for data plotting. We aim to solve this by providing a user-friendly library that makes plot creation more accessible, reducing the code needed for effective visualizations. 
