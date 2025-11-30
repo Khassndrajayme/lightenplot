@@ -20,12 +20,12 @@ __email__ = 'your.email@example.com'
 __license__ = 'MIT'
 
 # Import main classes
-from .base import VisualizationBase
+from .visualization import VisualizationBase
 from .plotease import PlotEase
 from .diagnostic import DiagnosticPlotter
 from .summary import SummaryGenerator
-from .comparator import ModelComparator
-from .plotter import QuickPlotter
+from .model_comp import ModelComparator
+from .quick_plotter import QuickPlotter
 
 # Import utilities
 from . import utils
