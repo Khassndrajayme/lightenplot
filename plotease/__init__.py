@@ -1,6 +1,25 @@
-# 1. Import all primary classes from their new modules 
-# The classes are imported relative to the current package ('.')
+"""
+PlotEase: A simplified data visualization library for Python
 
+PlotEase makes data visualization easy and intuitive, reducing the complexity
+of matplotlib and ggplot while maintaining powerful features.
+
+Example:
+    >>> from plotease import PlotEase
+    >>> import pandas as pd
+    >>> 
+    >>> data = pd.read_csv('data.csv')
+    >>> pe = PlotEase(data, theme='minimal')
+    >>> pe.autoplot(target='price')
+"""
+
+# Version information
+__version__ = '1.0.0'
+__author__ = 'PlotEase Team'
+__email__ = 'your.email@example.com'
+__license__ = 'MIT'
+
+# Import main classes
 from .visualization import VisualizationBase
 from .plotease import PlotEase
 from .diagnostic import DiagnosticPlotter
@@ -8,19 +27,48 @@ from .summary import SummaryGenerator
 from .model_comp import ModelComparator
 from .quick_plotter import QuickPlotter
 
-# The main user-facing facade class
-from .plotease import PlotEase              # From plotease.py 
+# Import utilities
+from . import utils
 
-# 2. Define __all__ 
-# This explicitly lists all public objects to expose when someone runs 'from plotease import *'
+# Define what gets imported with "from plotease import *"
 __all__ = [
-    "PlotEase",
-    "VisualizationBase",
-    "SummaryGenerator",
-    "DiagnosticPlotter",
-    "QuickPlotter",
-    "ModelComparator",
+    # Main classes
+    'PlotEase',
+    'VisualizationBase',
+    'DiagnosticPlotter',
+    'SummaryGenerator',
+    'ModelComparator',
+    'QuickPlotter',
+    
+    # Utilities module
+    'utils',
+    
+    # Version info
+    '__version__',
 ]
 
-# 3. Package Version 
-__version__ = "0.1.0"
+# Package metadata
+PACKAGE_INFO = {
+    'name': 'plotease',
+    'version': __version__,
+    'description': 'A simplified data visualization library for Python',
+    'author': __author__,
+    'email': __email__,
+    'license': __license__,
+    'url': 'https://github.com/yourusername/plotease',
+}
+
+
+def get_version():
+    """Return the current version of PlotEase"""
+    return __version__
+
+
+def print_info():
+    """Print package information"""
+    print(f"PlotEase v{__version__}")
+    print(f"Author: {__author__}")
+    print(f"License: {__license__}")
+    print(f"Documentation: https://plotease.readthedocs.io/")
+  
+# print(f"PlotEase v{__version__} loaded successfully!")
