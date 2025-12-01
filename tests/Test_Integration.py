@@ -3,7 +3,6 @@ Integration Tests for PlotEase Library
 This file verifies that all components of the library work together seamlessly
 in a typical data analysis workflow using the mtcars dataset.
 """
-
 import unittest
 import pandas as pd
 # Import all relevant classes to test their interactions
