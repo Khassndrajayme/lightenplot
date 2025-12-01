@@ -366,7 +366,4 @@ We welcome contributions! Please feel free to:
 - Submit pull requests
 - Improve documentation
 
-Made with ❤️ by the PlotEase Team
----
-
 **Made with ❤️ by the PlotEase Team**
