@@ -30,52 +30,33 @@ def load_mtcars():
 
 
 class TestPolymorphism(unittest.TestCase):
-    """Test polymorphism: method overriding and consistent interface via ABC."""
+    """Test polymorphism - method overriding"""
     
     def setUp(self):
-        """Set up instances of the classes that override render()."""
+        """Set up test data - using mtcars"""
         self.mtcars = load_mtcars()
-        self.pe = PlotEase(self.mtcars)
-        self.dp = DiagnosticPlotter(self.mtcars)
-        self.qp = QuickPlotter(self.mtcars)
+    
+    def test_render_method_override(self):
+        """Test that render() is overridden in subclasses"""
+        pe = PlotEase(self.mtcars)
+        dp = DiagnosticPlotter(self.mtcars)
+        qp = QuickPlotter(self.mtcars)
         
-    def test_render_method_override_existence(self):
-        """Test that all concrete classes have implemented the required render method."""
-        # Check existence via hasattr
-        self.assertTrue(hasattr(self.pe, 'render'), "PlotEase is missing render()")
-        self.assertTrue(hasattr(self.dp, 'render'), "DiagnosticPlotter is missing render()")
-        self.assertTrue(hasattr(self.qp, 'render'), "QuickPlotter is missing render()")
+        # All should have render method
+        self.assertTrue(hasattr(pe, 'render'))
+        self.assertTrue(hasattr(dp, 'render'))
+        self.assertTrue(hasattr(qp, 'render'))
         
-    def test_render_method_execution(self):
-        """Test that calling render() on different classes executes without error."""
-        # This confirms that the methods are not left as abstract or raising NotImplementedError
-        
-        results = {}
-        
-        # Test PlotEase's render
+        # They should have different implementations
         try:
-            self.pe.render()
-            results['PlotEase'] = True
+            pe.render()
+            dp.render()
+            qp.render()
+            success = True
         except Exception:
-            results['PlotEase'] = False
-            
-        # Test DiagnosticPlotter's render
-        try:
-            self.dp.render()
-            results['DiagnosticPlotter'] = True
-        except Exception:
-            results['DiagnosticPlotter'] = False
-            
-        # Test QuickPlotter's render
-        try:
-            self.qp.render()
-            results['QuickPlotter'] = True
-        except Exception:
-            results['QuickPlotter'] = False
-            
-        self.assertTrue(results['PlotEase'], "PlotEase's render() failed to execute.")
-        self.assertTrue(results['DiagnosticPlotter'], "DiagnosticPlotter's render() failed to execute.")
-        self.assertTrue(results['QuickPlotter'], "QuickPlotter's render() failed to execute.")
+            success = False
+        
+        self.assertTrue(success)
 
 
 if __name__ == '__main__':
