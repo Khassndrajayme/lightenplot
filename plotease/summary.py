@@ -19,8 +19,6 @@ class SummaryGenerator(VisualizationBase):
             data: The pandas DataFrame.
             theme: The visual theme string (passed to the base class).
         """
-        # FIX: Pass both data and theme to the parent (VisualizationBase) constructor.
-        # This correctly handles the three arguments (self, data, theme).
         super().__init__(data, theme) 
     
     def tabular_summary(self, style: str = 'full') -> pd.DataFrame:
@@ -30,7 +28,7 @@ class SummaryGenerator(VisualizationBase):
         df = self._data
         
         # Helper function to get summary stats for numeric columns
-        def get_numeric_summary(data: pd.DataFrame) -> pd.DataFrame:
+        def summarize_numeric(self, data: pd.DataFrame) -> pd.DataFrame:
             stats = data.describe(include=[np.number]).T
             stats['missing'] = data.isnull().sum()
             stats['% missing'] = (stats['missing'] / len(data)) * 100
@@ -63,13 +61,25 @@ class SummaryGenerator(VisualizationBase):
         else:
             raise ValueError(f"Unknown style '{style}'. Choose from 'full', 'numeric', or 'categorical'.")
 
+        if style == 'full':
+            numeric_df = self.summarize_numeric(df) # <-- Assuming fix A applied
+            categorical_df = get_categorical_summary(df)
+            
+            # Combine the summaries
+            full_summary = pd.concat([numeric_df, categorical_df], axis=0, sort=True)
+            
+            # FIX: Reset the index (variable names) and rename the index column to 'Column'
+            full_summary = full_summary.reset_index().rename(columns={'index': 'Column'})
+            
+            return full_summary.sort_values(by='Column')
+
     # Implementation of the abstract method (Polymorphism)
     def render(self):
         """
         Implementation of the abstract method from VisualizationBase.
         Renders the full tabular summary (prints it to the console).
         """
-        print("\n📊 Comprehensive Data Summary:")
+        print("Comprehensive Data Summary:")
         print("=" * 30)
         # Delegate the actual work to the tabular_summary method
         summary_df = self.tabular_summary(style='full')
