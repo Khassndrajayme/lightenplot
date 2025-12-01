@@ -12,6 +12,13 @@ from plotease import VisualizationBase, PlotEase
 
 class TestVisualizationBase(unittest.TestCase):
     """Test the abstract base class"""
+    def load_mtcars():
+    """Load mtcars dataset for testing"""
+    # Using a simplified version for the base class test
+    return pd.DataFrame({
+        'A': [1, 2, 3],
+        'B': [10, 20, 30]
+    })
     
     def setUp(self):
         """Set up test data - using mtcars"""
