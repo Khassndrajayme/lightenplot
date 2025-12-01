@@ -6,8 +6,8 @@ from typing import Optional, List, Dict
 from .visualization import VisualizationBase
 
 from .summary import SummaryGenerator
-from .plotters import DiagnosticPlotter, QuickPlotter
-from .comparison import ModelComparator
+from .quick_plotter import DiagnosticPlotter, QuickPlotter
+from .model_comp import ModelComparator
 
 
 class PlotEase(VisualizationBase):
