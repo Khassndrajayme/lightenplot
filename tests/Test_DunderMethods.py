@@ -2,7 +2,6 @@
 Unit Tests for Dunder Methods (__methods__)
 This file verifies the Pythonic integration of PlotEase through operator overloading.
 """
-
 import unittest
 import pandas as pd
 # Import the main class that implements/overrides the dunder methods
