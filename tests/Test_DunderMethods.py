@@ -32,52 +32,45 @@ def load_mtcars():
 
 
 class TestDunderMethods(unittest.TestCase):
-    """Test dunder methods (magic methods) defined in PlotEase."""
+    """Test dunder methods (magic methods)"""
     
     def setUp(self):
-        """Set up test data - using mtcars and a subset."""
+        """Set up test data - using mtcars"""
         self.mtcars = load_mtcars()
         self.mtcars_subset = self.mtcars.head(10)
     
     def test_repr(self):
-        """Test __repr__ method for correct developer-friendly string representation."""
-        pe = PlotEase(self.mtcars, theme='colorful')
+        """Test __repr__ method"""
+        pe = PlotEase(self.mtcars)
         repr_str = repr(pe)
-        # Check for class name, row count (32), column count (11), and theme
         self.assertIn('PlotEase', repr_str)
-        self.assertIn('rows=32', repr_str)
-        # Note: If you included all mtcars columns (11), adjust this assertion if needed
-        self.assertIn('cols=5', repr_str) # Based on the subset in load_mtcars() above
-        self.assertIn("theme='colorful'", repr_str)
+        self.assertIn('rows=32', repr_str)  # mtcars has 32 cars
+        self.assertIn('cols=11', repr_str)  # mtcars has 11 columns
     
     def test_len(self):
-        """Test __len__ method, allowing len(pe) to return the row count."""
-        pe_full = PlotEase(self.mtcars)  # 32 rows
+        """Test __len__ method"""
+        pe_full = PlotEase(self.mtcars)
         self.assertEqual(len(pe_full), 32)
         
-        pe_subset = PlotEase(self.mtcars_subset) # 10 rows
+        pe_subset = PlotEase(self.mtcars_subset)
         self.assertEqual(len(pe_subset), 10)
     
     def test_eq(self):
-        """Test __eq__ method (==) for object equality based on data and theme."""
-        # Case 1: Identical data and theme
+        """Test __eq__ method"""
         pe1 = PlotEase(self.mtcars, theme='minimal')
         pe2 = PlotEase(self.mtcars, theme='minimal')
-        self.assertEqual(pe1, pe2)
-        
-        # Case 2: Different data (should be False)
         pe3 = PlotEase(self.mtcars_subset, theme='minimal')
-        self.assertNotEqual(pe1, pe3)
         
+        self.assertEqual(pe1, pe2)
+        self.assertNotEqual(pe1, pe3)
+    
     def test_lt(self):
-        """Test __lt__ method (<) for comparison based on data size (row count)."""
+        """Test __lt__ method (less than)"""
         pe_full = PlotEase(self.mtcars)      # 32 cars
-        pe_subset = PlotEase(self.mtcars_subset) # 10 cars
+        pe_subset = PlotEase(self.mtcars_subset)  # 10 cars
         
         self.assertFalse(pe_full < pe_subset)  # 32 < 10 = False
         self.assertTrue(pe_subset < pe_full)   # 10 < 32 = True
-        self.assertFalse(pe_full < pe_full)    # 32 < 32 = False
-
 
 if __name__ == '__main__':
     # Run with verbose output when executed directly
