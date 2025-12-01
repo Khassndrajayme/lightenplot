@@ -1,5 +1,5 @@
 # PlotEase
-PlotEase is designed to reduce syntax complexity compared to matplotlib and ggplot, making data visualization accessible and intuitive. Built with Object-Oriented Programming principles, PlotEase provides powerful features with minimal code. 
+PlotEase is designed to reduce syntax complexity compared to matplotlib, seaborn and ggplot, making data visualization accessible and intuitive. Built with Object-Oriented Programming principles, PlotEase provides powerful features with minimal code. 
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
