@@ -132,12 +132,12 @@ class ModelComparator:
         return self._df.equals(other._df)
 
     def __gt__(self, other) -> bool:
-        """
-        Implements the greater than operator (>) for ModelComparator objects.
-        This is the method required to resolve the previous TypeError.
-        """
-        if not isinstance(other, ModelComparator):
-            return NotImplemented
+    """Implements the greater than operator (>)."""
+    if not isinstance(other, ModelComparator):
+        return NotImplemented
+    
+    # FIX: Explicitly cast the result to a standard Python bool
+    return bool(self.overall_mean_score > other.overall_mean_score)
         
         # Comparison is based on the calculated average performance score.
         return self.overall_mean_score > other.overall_mean_score
