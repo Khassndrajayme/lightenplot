@@ -1,16 +1,67 @@
 # PlotEase
-PlotEase is designed to reduce syntax complexity compared to matplotlib, seaborn and ggplot, making data visualization accessible and intuitive. Built with Object-Oriented Programming principles, PlotEase provides powerful features with minimal code. 
+
+**Simplify data visualization with elegant, one-line commands.**
+
+PlotEase is a Python library designed to dramatically reduce syntax complexity compared to matplotlib, seaborn, and ggplot. Built with Object-Oriented Programming principles, PlotEase makes data visualization accessible and intuitive while maintaining the power and flexibility you need.
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-
 ![PlotEase UML Class Diagram](PlotEase_UMLDiagram/PlotEase_UMLDiagram.png)
+
+---
+
+## 📑 Table of Contents
+
+- [Why PlotEase?](#why-plotease)
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Usage Examples](#usage-examples)
+- [Themes](#themes)
+- [Testing](#testing)
+- [Documentation](#documentation)
+- [Troubleshooting](#troubleshooting)
+- [Contributors](#contributors)
+- [License](#license)
+
+---
+
+## Why PlotEase?
+
+Traditional plotting libraries require extensive code for simple visualizations. PlotEase changes that.
+
+### Traditional Approach (matplotlib/seaborn)
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 10+ lines for a simple scatter plot
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.scatterplot(data=df, x='age', y='salary', ax=ax, color='blue')
+ax.set_title('Age vs Salary', fontsize=14)
+ax.set_xlabel('Age', fontsize=12)
+ax.set_ylabel('Salary', fontsize=12)
+plt.grid(alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+### PlotEase Approach
+```python
+from plotease import PlotEase
+pe = PlotEase(data)
+
+# Just 1 line!
+pe.quick_plot('age', 'salary', color='blue', title='Age vs Salary')
+```
+
+**Result: 90% less code, same beautiful visualizations.**
 
 
 ## Features
 
-### **1. AutoPlot Diagnostics**
+### **AutoPlot Diagnostics**
 Automatically generate comprehensive diagnostic plots based on your data types:
 - Distribution plots for numeric variables
 - Correlation heatmaps
@@ -18,40 +69,44 @@ Automatically generate comprehensive diagnostic plots based on your data types:
 - Outlier detection with boxplots
 - Target variable analysis
 
-### **2. Tabular Summary**
+### **Tabular Summary**
 Generate detailed statistical summaries with a single command:
 - Comprehensive statistics for numeric columns
 - Category analysis for categorical data
 - Missing value reports
 - Export to CSV/Excel
 
-### **3. Model Comparison**
+### **Model Comparison**
 Visualize machine learning model performance:
 - Grouped bar charts comparing metrics
 - Radar charts showing model profiles
 - Best model identification
 - Side-by-side performance comparison
 
-### **4. Quick Plotting**
+### **Quick Plotting**
 Create beautiful plots with minimal syntax:
 - Automatic plot type detection
 - Scatter, line, bar, histogram, and box plots
 - Custom styling and themes
 - One-line plot generation
 
-
 ## Installation
 
-### From PyPI 
+### From PyPI
 ```bash
 pip install plotease
 ```
 
 ### From Source
 ```bash
-git clone https://github.com/Khassndrajayme/plotease.git
-cd plotease
+git clone https://github.com/Khassndrajayme/PlotEase.git
+cd PlotEase
 pip install -e .
+```
+
+### Verify Installation
+```bash
+python -c "from plotease import PlotEase; print('PlotEase installed successfully!')"
 ```
 
 ### Requirements
@@ -61,6 +116,7 @@ pip install -e .
 - matplotlib >= 3.4.0
 - seaborn >= 0.11.0
 - scipy >= 1.7.0
+
 
 ## Quick Start
 
@@ -78,7 +134,28 @@ pe = PlotEase(data, theme='minimal')
 
 # That's it! You're ready to visualize
 ```
-### Tabular Summary
+
+## Usage Examples
+
+### 1. AutoPlot Diagnostics
+
+Generate comprehensive diagnostic plots automatically:
+
+```python
+# Analyze your entire dataset with one command
+pe.autoplot()
+
+# Focus on specific target variable
+pe.autoplot(target='sales')
+```
+
+This automatically creates:
+- Distribution plots for all numeric variables
+- Correlation heatmap
+- Missing value visualization
+- Outlier detection plots
+
+### 2. Tabular Summary
 
 ```python
 # Full summary (numeric + categorical)
@@ -89,6 +166,9 @@ numeric_summary = pe.tabular_summary(style='numeric')
 
 # Only categorical columns
 cat_summary = pe.tabular_summary(style='categorical')
+
+# Export to file
+pe.tabular_summary(style='full', export_to='summary.csv')
 ```
 
 **Output includes:**
@@ -96,7 +176,7 @@ cat_summary = pe.tabular_summary(style='categorical')
 - Unique values, Top category, Frequency
 - Memory usage statistics
 
-### Model Comparison
+### 3. Model Comparison
 
 ```python
 models_results = {
@@ -120,14 +200,14 @@ models_results = {
     }
 }
 
+# Compare all metrics
 pe.compare_models(models_results)
 
 # Compare specific metrics only
 pe.compare_models(models_results, metrics=['Accuracy', 'F1-Score'])
 ```
 
-
-### Quick Plotting
+### 4. Quick Plotting
 
 ```python
 # Automatic plot type detection
@@ -144,7 +224,11 @@ pe.quick_plot('x', 'y', kind='scatter',
               color='coral', 
               title='My Custom Title',
               figsize=(12, 6))
+```
 
+### 5. Custom Styling
+
+```python
 # Apply custom style globally
 custom_style = {
     'font_size': 14,
@@ -153,6 +237,9 @@ custom_style = {
     'grid_alpha': 0.3
 }
 pe.set_style(custom_style)
+
+# All subsequent plots will use this style
+pe.quick_plot('x', 'y')
 ```
 
 ## Themes
@@ -170,7 +257,8 @@ pe = PlotEase(data, theme='colorful')   # Vibrant colors
 pe.set_theme('dark')
 ```
 
-##  Testing
+
+## Testing
 
 Run the test suite:
 
@@ -191,7 +279,9 @@ Run the demo:
 python demo.py
 ```
 
-## 📖 Documentation
+---
+
+## Documentation
 
 ### Helper Functions
 
@@ -211,17 +301,52 @@ from plotease.utils import (
 )
 ```
 
+### Example: Using Utility Functions
+
+```python
+from plotease.utils import load_mtcars, get_numeric_columns
+
+# Load example dataset
+data = load_mtcars()
+
+# Get numeric columns
+numeric_cols = get_numeric_columns(data)
+print(f"Numeric columns: {numeric_cols}")
+```
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**Issue: `ModuleNotFoundError: No module named 'plotease'`**
+- **Solution:** Ensure you've installed the package: `pip install plotease`
+
+**Issue: Plots not displaying**
+- **Solution:** Make sure you're running in an environment that supports plotting (Jupyter, IDE with plot support)
+- Try adding `plt.show()` if in a script
+
+**Issue: `ValueError: DataFrame is empty`**
+- **Solution:** Verify your data is loaded correctly before creating PlotEase instance
+- Use `print(data.head())` to check
+
+**Issue: Import errors for dependencies**
+- **Solution:** Install missing dependencies: `pip install pandas numpy matplotlib seaborn scipy`
+
+**Issue: Theme not applying**
+- **Solution:** Set theme during initialization: `pe = PlotEase(data, theme='dark')`
+- Or use: `pe.set_theme('dark')`
+
 ## Contributors
 
 This project was developed as part of an Object-Oriented Programming course.
 
 ### Team Members
 
-- **[Khassandra Louise C. Jayme]** - Lead Developer - [GitHub](https://github.com/Khassndrajayme)
-- **[Sheena Angela T. Janog]** - Developer - [GitHub](https://github.com/Sheena06J)
-- **[Xavier Neo Mahilum]** - Developer - [GitHub](https://github.com/MysteriousHotdog)
-- **[Allen Floro Ventura]** - Developer - [GitHub](https://github.com/AllenKalbo)
-- **[Genetyron Zamoranos]** - Developer - [GitHub](https://github.com/noryt-py)
+- **Khassandra Louise C. Jayme** - Lead Developer - [GitHub](https://github.com/Khassndrajayme)
+- **Sheena Angela T. Janog** - Developer - [GitHub](https://github.com/Sheena06J)
+- **Xavier Neo Mahilum** - Developer - [GitHub](https://github.com/MysteriousHotdog)
+- **Allen Floro Ventura** - Developer - [GitHub](https://github.com/AllenKalbo)
+- **Genetyron Zamoranos** - Developer - [GitHub](https://github.com/noryt-py)
 
 ### Acknowledgments
 
@@ -229,9 +354,19 @@ This project was developed as part of an Object-Oriented Programming course.
 - Inspired by matplotlib, seaborn, and ggplot2
 - mtcars dataset from R's datasets package
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## Contributing
 
-**Made with Honeybunchsugarplumsweetypie by the PlotEase Team**
+We welcome contributions! Please feel free to:
+- Report bugs
+- Suggest new features
+- Submit pull requests
+- Improve documentation
+
+Made with ❤️ by the PlotEase Team
+---
+
+**Made with ❤️ by the PlotEase Team**
