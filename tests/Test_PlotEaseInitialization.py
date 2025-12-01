@@ -30,52 +30,52 @@ def load_mtcars():
 
 
 class TestPlotEaseInitialization(unittest.TestCase):
-    """Test PlotEase initialization, validation, and core property methods."""
+    """Test PlotEase initialization and validation"""
     
     def setUp(self):
-        """Set up test data - using mtcars."""
+        """Set up test data - using mtcars"""
         self.mtcars = load_mtcars()
-        
-  
-    # Initialization and Validation Tests
-   
+    
     def test_valid_initialization(self):
-        """Test successful initialization with mtcars data."""
-        # Using a theme ensures theme setting is handled correctly
+        """Test successful initialization with mtcars data"""
         pe = PlotEase(self.mtcars, theme='minimal')
         self.assertIsNotNone(pe)
         self.assertEqual(pe._theme, 'minimal')
-        self.assertEqual(len(pe), 32)  # mtcars has 32 rows
-        
+        self.assertEqual(len(pe), 32)  # mtcars has 32 cars
+    
     def test_invalid_data_type(self):
-        """Test TypeError when passing non-DataFrame data."""
+        """Test TypeError when passing non-DataFrame"""
         with self.assertRaises(TypeError):
             PlotEase([1, 2, 3])
-            
+        
+        with self.assertRaises(TypeError):
+            PlotEase({'mpg': [21, 22]})
+        
         with self.assertRaises(TypeError):
             PlotEase(None)
-            
+    
     def test_empty_dataframe(self):
-        """Test ValueError when passing an empty DataFrame."""
+        """Test ValueError when passing empty DataFrame"""
         with self.assertRaises(ValueError):
             PlotEase(pd.DataFrame())
-
     
-    # Encapsulation Tests (Getters/Setters inherited from Base)
-   
     def test_get_data(self):
-        """Test data getter method (encapsulation)."""
+        """Test data getter method (encapsulation)"""
         pe = PlotEase(self.mtcars)
         retrieved_data = pe.get_data()
         self.assertTrue(retrieved_data.equals(self.mtcars))
-        
+    
     def test_set_theme(self):
-        """Test theme setter method (encapsulation)."""
+        """Test theme setter method (encapsulation)"""
         pe = PlotEase(self.mtcars, theme='default')
-        self.assertEqual(pe._theme, 'default')
-        
         pe.set_theme('dark')
         self.assertEqual(pe._theme, 'dark')
+    
+    def test_mtcars_columns(self):
+        """Test that mtcars has expected columns"""
+        pe = PlotEase(self.mtcars)
+        expected_cols = ['mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec', 'vs', 'am', 'gear', 'carb']
+        self.assertEqual(list(self.mtcars.columns), expected_cols)
 
 
 if __name__ == '__main__':
