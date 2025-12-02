@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
-from .visualization import VisualizationBase 
-from typing import Optional, List, Dict 
+from .visualization import VisualizationBase
+from typing import Optional, List, Dict
 
 class SummaryGenerator(VisualizationBase):
     """
