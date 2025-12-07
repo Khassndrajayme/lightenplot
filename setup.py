@@ -1,5 +1,5 @@
 """
-Setup configuration for PlotEase package
+Setup configuration for LightenPlot package
 """
 
 from setuptools import setup, find_packages
@@ -17,14 +17,14 @@ def read_requirements():
 
 setup(
     # Package metadata
-    name='plotease',
+    name='lightenplot', 
     version='1.0.0',
     author='Your Team Name',
     author_email='your.email@example.com',
     description='A simplified data visualization library for Python',
     long_description=read_file('README.md'),
     long_description_content_type='text/markdown',
-    url='https://github.com/yourusername/plotease',
+    url='https://github.com/Khassndrajayme/lightenplot', 
     
     # Package configuration
     packages=find_packages(exclude=['tests', 'docs', 'examples']),
@@ -54,21 +54,21 @@ setup(
     
     # Project URLs
     project_urls={
-        'Bug Reports': 'https://github.com/yourusername/plotease/issues',
-        'Source': 'https://github.com/yourusername/plotease',
-        'Documentation': 'https://plotease.readthedocs.io/',
+        'Bug Reports': 'https://github.com/Khassndrajayme/lightenplot/issues', 
+        'Source': 'https://github.com/Khassndrajayme/lightenplot', 
+        'Documentation': 'https://lightenplot.readthedocs.io/', 
     },
     
     # Include additional files
     include_package_data=True,
     package_data={
-        'plotease': ['data/*.csv'],
+        'lightenplot': ['data/*.csv'], 
     },
     
     # Entry points (optional - for command-line tools)
     # entry_points={
     #     'console_scripts': [
-    #         'plotease=plotease.cli:main',
+    #         'lightenplot=lightenplot.cli:main', # Commented change for completeness
     #     ],
     # },
     

@@ -1,143 +1,410 @@
+"""
+Compare multiple machine learning models visually.
+
+This module provides tools to compare model performance
+through various visualization techniques.
+"""
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import Optional, List, Dict 
+import seaborn as sns
+from typing import Dict, List, Optional, Union
+from .visualization_base import VisualizationBase
 
-class ModelComparator:
+
+class ModelComparator(VisualizationBase):
     """
-    Compares machine learning model performance across various metrics.
+    Compare multiple models through visualizations.
+    
+    This class helps visualize and compare the performance of different
+    machine learning models using various metrics and plots.
+    
+    Attributes:
+        models (dict): Dictionary of model names and their metrics
     """
     
-    def __init__(self, models_results: Dict[str, Dict[str, float]]):
-        """Initializes the ModelComparator with a dictionary of model results."""
-        self._models_results = models_results  
+    def __init__(self, models: Optional[Dict[str, Dict]] = None, **kwargs):
+        """
+        Initialize ModelComparator.
         
-        if not models_results:
-            self._df = pd.DataFrame()
+        Args:
+            models: Dictionary with model names as keys and metric dicts as values
+            **kwargs: Additional arguments passed to VisualizationBase
+        """
+        super().__init__(**kwargs)
+        self._models = models if models is not None else {}
+    
+    def add_model(self, name: str, metrics: Dict[str, float]) -> None:
+        """
+        Add a model with its metrics.
+        
+        Args:
+            name: Model name
+            metrics: Dictionary of metric names and values
+        """
+        self._models[name] = metrics
+    
+    def remove_model(self, name: str) -> None:
+        """
+        Remove a model from comparison.
+        
+        Args:
+            name: Model name to remove
+        """
+        if name in self._models:
+            del self._models[name]
         else:
-            # Convert results to a DataFrame (models as index, metrics as columns)
-            self._df = pd.DataFrame(models_results).T
+            print(f"Model '{name}' not found")
     
-    def create_bar_chart(self, ax: plt.Axes, df: pd.DataFrame):
-        """Creates and formats a grouped bar chart for model performance."""
-        if df.empty:
-            ax.text(0.5, 0.5, 'No Data to Plot', ha='center', va='center', fontsize=16)
-            ax.set_title('Model Performance Comparison (Bar Chart)')
-            return
+    @property
+    def models(self) -> Dict[str, Dict]:
+        """Get the models dictionary."""
+        return self._models
+    
+    @property
+    def model_names(self) -> List[str]:
+        """Get list of model names."""
+        return list(self._models.keys())
+    
+    def plot(self, metric: Optional[str] = None) -> plt.Figure:
+        """
+        Create a comparison plot for all models.
+        
+        Args:
+            metric: Specific metric to plot (None for all metrics)
             
-        df.plot(kind='bar', ax=ax, width=0.8, edgecolor='black')
-        ax.set_title('Model Performance Comparison (Bar Chart)', fontsize=16, fontweight='bold')
-        ax.set_xlabel('Models', fontsize=12)
-        ax.set_ylabel('Score', fontsize=12)
-        ax.legend(title='Metrics', bbox_to_anchor=(1.05, 1), loc='upper left')
-        ax.grid(axis='y', alpha=0.3)
-        ax.set_xticklabels(df.index, rotation=45, ha='right')
-        ax.set_ylim(0, 1.0)
-        
-        for container in ax.containers:
-            ax.bar_label(container, fmt='%.3f', padding=3, fontsize=9)
-    
-    def create_radar_chart(self, ax: plt.Axes, df: pd.DataFrame):
+        Returns:
+            matplotlib.figure.Figure: The created figure
         """
-        Creates and formats a radar chart for model performance.
-        
-        """
-        if df.empty or len(df.columns) < 3:
-            ax.text(0.5, 0.5, 'Requires at least 3 Metrics', ha='center', va='center', fontsize=16)
-            ax.set_title('Model Performance Radar')
+        if not self._models:
+            fig, ax = plt.subplots(figsize=self._figsize)
+            ax.text(0.5, 0.5, 'No models to compare. Use add_model() first.', 
+                   ha='center', va='center', fontsize=14)
             ax.axis('off')
-            return
-
-        n_metrics = len(df.columns)
-        # Calculate angles for the radar axes (from 0 to 2*pi, closed loop)
-        angles = np.linspace(0, 2 * np.pi, n_metrics, endpoint=False).tolist()
-        angles += angles[:1]
+            return fig
         
-        for model_name, values in df.iterrows():
-            values_list = values.tolist()
-            values_list += values_list[:1]
-            ax.plot(angles, values_list, 'o-', linewidth=2, label=model_name)
-            ax.fill(angles, values_list, alpha=0.15)
+        if metric:
+            return self._plot_single_metric(metric)
+        else:
+            return self._plot_all_metrics()
+    
+    def _plot_single_metric(self, metric: str) -> plt.Figure:
+        """Plot a single metric across all models."""
+        fig, ax = plt.subplots(figsize=self._figsize)
+        
+        model_names = []
+        values = []
+        
+        for name, metrics in self._models.items():
+            if metric in metrics:
+                model_names.append(name)
+                values.append(metrics[metric])
+        
+        if not values:
+            ax.text(0.5, 0.5, f'Metric "{metric}" not found in any model',
+                   ha='center', va='center', fontsize=12)
+            ax.axis('off')
+        else:
+            # Sort by value
+            sorted_pairs = sorted(zip(model_names, values), key=lambda x: x[1], reverse=True)
+            model_names, values = zip(*sorted_pairs)
+            
+            colors = plt.cm.viridis(np.linspace(0.3, 0.9, len(values)))
+            bars = ax.barh(model_names, values, color=colors, edgecolor='black')
+            
+            ax.set_xlabel(metric.capitalize(), fontweight='bold')
+            ax.set_title(f'Model Comparison: {metric.capitalize()}', 
+                        fontsize=14, fontweight='bold')
+            ax.grid(axis='x', alpha=0.3)
+            
+            # Add value labels
+            for bar, val in zip(bars, values):
+                ax.text(val + 0.01, bar.get_y() + bar.get_height()/2,
+                       f'{val:.4f}', ha='left', va='center')
+        
+        plt.tight_layout()
+        return fig
+    
+    def _plot_all_metrics(self) -> plt.Figure:
+        """Plot all metrics for all models."""
+        # Get all unique metrics
+        all_metrics = set()
+        for metrics in self._models.values():
+            all_metrics.update(metrics.keys())
+        all_metrics = sorted(list(all_metrics))
+        
+        if not all_metrics:
+            fig, ax = plt.subplots(figsize=self._figsize)
+            ax.text(0.5, 0.5, 'No metrics found',
+                   ha='center', va='center', fontsize=12)
+            ax.axis('off')
+            return fig
+        
+        # Create DataFrame for heatmap
+        data = []
+        for model_name in self._models.keys():
+            row = []
+            for metric in all_metrics:
+                value = self._models[model_name].get(metric, np.nan)
+                row.append(value)
+            data.append(row)
+        
+        df = pd.DataFrame(data, index=self._models.keys(), columns=all_metrics)
+        
+        fig, ax = plt.subplots(figsize=self._figsize)
+        sns.heatmap(df, annot=True, fmt='.4f', cmap='RdYlGn', 
+                   ax=ax, cbar_kws={'label': 'Value'}, linewidths=0.5)
+        ax.set_title('Model Performance Comparison', fontsize=14, fontweight='bold')
+        ax.set_xlabel('Metrics', fontweight='bold')
+        ax.set_ylabel('Models', fontweight='bold')
+        
+        plt.tight_layout()
+        return fig
+    
+    def radar_plot(self, metrics: Optional[List[str]] = None, 
+                   normalize: bool = True) -> plt.Figure:
+        """
+        Create a radar plot comparing models across metrics.
+        
+        Args:
+            metrics: List of metrics to include (None for all)
+            normalize: If True, normalize metrics to 0-1 scale
+            
+        Returns:
+            matplotlib.figure.Figure: The created figure
+        """
+        if not self._models:
+            fig, ax = plt.subplots(figsize=self._figsize)
+            ax.text(0.5, 0.5, 'No models to compare', 
+                   ha='center', va='center', fontsize=14)
+            ax.axis('off')
+            return fig
+        
+        if metrics is None:
+            all_metrics = set()
+            for model_metrics in self._models.values():
+                all_metrics.update(model_metrics.keys())
+            metrics = sorted(list(all_metrics))
+        
+        # Prepare data
+        model_names = list(self._models.keys())
+        num_metrics = len(metrics)
+        
+        # Create angles for radar plot
+        angles = np.linspace(0, 2 * np.pi, num_metrics, endpoint=False).tolist()
+        angles += angles[:1]  # Complete the circle
+        
+        fig, ax = plt.subplots(figsize=self._figsize, subplot_kw=dict(projection='polar'))
+        
+        colors = plt.cm.tab10(np.linspace(0, 1, len(model_names)))
+        
+        for idx, model_name in enumerate(model_names):
+            values = []
+            for metric in metrics:
+                value = self._models[model_name].get(metric, 0)
+                values.append(value)
+            
+            # Normalize if requested
+            if normalize and values:
+                max_val = max(max(values), 1e-6)  # Avoid division by zero
+                values = [v / max_val for v in values]
+            
+            values += values[:1]  # Complete the circle
+            
+            ax.plot(angles, values, 'o-', linewidth=2, label=model_name, color=colors[idx])
+            ax.fill(angles, values, alpha=0.15, color=colors[idx])
         
         ax.set_xticks(angles[:-1])
-        # FIX: The radar chart axes labels were incomplete in your snippet
-        ax.set_xticklabels(df.columns, fontsize=10)
-        ax.set_ylim(0, 1.0)
-        ax.set_title('Model Performance Radar', fontsize=16, fontweight='bold', pad=20)
-        ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1))
+        ax.set_xticklabels(metrics)
+        ax.set_ylim(0, 1 if normalize else None)
+        ax.set_title('Model Comparison - Radar Plot', 
+                    fontsize=14, fontweight='bold', pad=20)
+        ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.0))
         ax.grid(True)
-
-
-    def compare_models(self, metrics: Optional[List[str]] = None):
-        """
-        Generates and displays two visualizations comparing the performance of the models.
-        """
-        if self._df.empty:
-            print("Error: No model results were loaded into the comparator.")
-            return
         
-        df = self._df.copy()
-        if metrics:
-            missing_metrics = [m for m in metrics if m not in df.columns]
-            if missing_metrics:
-                print(f"Error: The following metrics were not found: {missing_metrics}")
-                return
-            df = df[metrics]
-        
-        # Create a figure with two subplots side-by-side
-        # The main figure needs to be handled carefully to allow polar projection
-        fig = plt.figure(figsize=(15, 6))
-        ax_bar = fig.add_subplot(1, 2, 1)
-        ax_radar = fig.add_subplot(1, 2, 2, projection='polar')
-
-        self.create_bar_chart(ax_bar, df)
-        self.create_radar_chart(ax_radar, df)
-        
-        plt.tight_layout(rect=[0, 0, 0.85, 1])
-        plt.show() 
-        
-        print("\nModel Performance Summary:")
-        print("="*60)
-        print(df.to_string())
-        print("="*60)
-
-
-    def get_best_model(self, metric: str) -> str:
-        """
-        Retrieves the name of the model with the highest score for a specified metric.
-        """
-        if metric not in self._df.columns:
-            raise ValueError(f"Metric '{metric}' not found. Available metrics: {list(self._df.columns)}")
-        return self._df[metric].idxmax()
-
-
-    # --- Dunder Methods (Operator Overloading) ---
-
-    @property
-    def overall_mean_score(self) -> float:
-        """Calculates the average score across all models and all metrics."""
-        if self._df.empty:
-            return 0.0
-        # Calculate mean of all metrics, then take the mean of those means
-        return self._df.mean().mean()
-
-    def __repr__(self) -> str:
-        """Returns a developer-friendly, official string representation of the object."""
-        return f"ModelComparator(models={len(self._models_results)}, metrics={list(self._df.columns)})"
-
-    def __eq__(self, other) -> bool:
-        """Implements the equality operator (==)."""
-        if not isinstance(other, ModelComparator):
-            return False
-        return self._df.equals(other._df)
-
-    def __gt__(self, other) -> bool:
-        """Implements the greater than operator (>)."""
-        if not isinstance(other, ModelComparator):
-            return NotImplemented
+        plt.tight_layout()
+        return fig
     
-    # FIX: Explicitly cast the result to a standard Python bool
-        return bool(self.overall_mean_score > other.overall_mean_score)
+    def compare_predictions(self, y_true: Union[list, np.ndarray], 
+                           predictions: Dict[str, Union[list, np.ndarray]]) -> plt.Figure:
+        """
+        Compare model predictions against true values.
         
-        # Comparison is based on the calculated average performance score.
-        return self.overall_mean_score > other.overall_mean_score
+        Args:
+            y_true: True labels
+            predictions: Dictionary of model names and their predictions
+            
+        Returns:
+            matplotlib.figure.Figure: The created figure
+        """
+        n_models = len(predictions)
+        
+        if n_models == 0:
+            fig, ax = plt.subplots(figsize=self._figsize)
+            ax.text(0.5, 0.5, 'No predictions to compare', 
+                   ha='center', va='center', fontsize=14)
+            ax.axis('off')
+            return fig
+        
+        # Calculate subplot layout
+        n_cols = min(3, n_models)
+        n_rows = (n_models + n_cols - 1) // n_cols
+        
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(6*n_cols, 5*n_rows))
+        
+        if n_models == 1:
+            axes = np.array([axes])
+        axes = axes.flatten()
+        
+        for idx, (model_name, y_pred) in enumerate(predictions.items()):
+            ax = axes[idx]
+            
+            # Scatter plot of predictions vs true values
+            ax.scatter(y_true, y_pred, alpha=0.5, s=30)
+            
+            # Perfect prediction line
+            min_val = min(min(y_true), min(y_pred))
+            max_val = max(max(y_true), max(y_pred))
+            ax.plot([min_val, max_val], [min_val, max_val], 
+                   'r--', linewidth=2, label='Perfect Prediction')
+            
+            # Calculate R²
+            ss_res = np.sum((np.array(y_true) - np.array(y_pred)) ** 2)
+            ss_tot = np.sum((np.array(y_true) - np.mean(y_true)) ** 2)
+            r2 = 1 - (ss_res / ss_tot)
+            
+            ax.set_xlabel('True Values', fontweight='bold')
+            ax.set_ylabel('Predictions', fontweight='bold')
+            ax.set_title(f'{model_name}\nR² = {r2:.4f}', fontweight='bold')
+            ax.legend()
+            ax.grid(alpha=0.3)
+        
+        # Hide unused subplots
+        for idx in range(n_models, len(axes)):
+            axes[idx].axis('off')
+        
+        plt.suptitle('Model Predictions Comparison', fontsize=16, fontweight='bold')
+        plt.tight_layout()
+        return fig
+    
+    def metric_distribution(self, metric: str) -> plt.Figure:
+        """
+        Show distribution of a specific metric across models.
+        
+        Args:
+            metric: Metric name to analyze
+            
+        Returns:
+            matplotlib.figure.Figure: The created figure
+        """
+        values = []
+        model_names = []
+        
+        for name, metrics in self._models.items():
+            if metric in metrics:
+                values.append(metrics[metric])
+                model_names.append(name)
+        
+        if not values:
+            fig, ax = plt.subplots(figsize=self._figsize)
+            ax.text(0.5, 0.5, f'Metric "{metric}" not found', 
+                   ha='center', va='center', fontsize=14)
+            ax.axis('off')
+            return fig
+        
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+        
+        # Box plot
+        ax1.boxplot(values, vert=True, patch_artist=True,
+                   boxprops=dict(facecolor='lightblue'))
+        ax1.set_ylabel(metric.capitalize(), fontweight='bold')
+        ax1.set_title(f'{metric.capitalize()} Distribution', fontweight='bold')
+        ax1.grid(alpha=0.3, axis='y')
+        
+        # Add individual points
+        x = np.ones(len(values))
+        ax1.scatter(x, values, alpha=0.6, s=100, c='red', zorder=3)
+        
+        # Statistics text
+        stats_text = f"""
+        Mean: {np.mean(values):.4f}
+        Median: {np.median(values):.4f}
+        Std: {np.std(values):.4f}
+        Min: {np.min(values):.4f}
+        Max: {np.max(values):.4f}
+        """
+        ax2.text(0.5, 0.5, stats_text, ha='center', va='center',
+                fontsize=12, family='monospace',
+                bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+        ax2.axis('off')
+        
+        plt.suptitle(f'Metric Analysis: {metric.capitalize()}', 
+                    fontsize=14, fontweight='bold')
+        plt.tight_layout()
+        return fig
+    
+    def ranking_plot(self, metric: str, ascending: bool = False) -> plt.Figure:
+        """
+        Create a ranking plot for models based on a specific metric.
+        
+        Args:
+            metric: Metric to rank by
+            ascending: If True, rank in ascending order (lower is better)
+            
+        Returns:
+            matplotlib.figure.Figure: The created figure
+        """
+        model_scores = []
+        for name, metrics in self._models.items():
+            if metric in metrics:
+                model_scores.append((name, metrics[metric]))
+        
+        if not model_scores:
+            fig, ax = plt.subplots(figsize=self._figsize)
+            ax.text(0.5, 0.5, f'Metric "{metric}" not found', 
+                   ha='center', va='center', fontsize=14)
+            ax.axis('off')
+            return fig
+        
+        # Sort
+        model_scores.sort(key=lambda x: x[1], reverse=not ascending)
+        
+        names, scores = zip(*model_scores)
+        ranks = range(1, len(names) + 1)
+        
+        fig, ax = plt.subplots(figsize=self._figsize)
+        
+        colors = plt.cm.RdYlGn(np.linspace(0.2, 0.8, len(names)))
+        if ascending:
+            colors = colors[::-1]
+        
+        bars = ax.barh(names, scores, color=colors, edgecolor='black')
+        
+        # Add rank numbers
+        for i, (bar, rank, score) in enumerate(zip(bars, ranks, scores)):
+            ax.text(0.01, bar.get_y() + bar.get_height()/2,
+                   f'#{rank}', ha='left', va='center',
+                   fontweight='bold', fontsize=12, color='white')
+            ax.text(score + 0.01, bar.get_y() + bar.get_height()/2,
+                   f'{score:.4f}', ha='left', va='center', fontweight='bold')
+        
+        ax.set_xlabel(metric.capitalize(), fontweight='bold')
+        ax.set_title(f'Model Ranking by {metric.capitalize()}', 
+                    fontsize=14, fontweight='bold')
+        ax.grid(axis='x', alpha=0.3)
+        
+        plt.tight_layout()
+        return fig
+    
+    def __repr__(self) -> str:
+        """Return string representation."""
+        return f"ModelComparator(n_models={len(self._models)})"
+    
+    def __len__(self) -> int:
+        """Return number of models."""
+        return len(self._models)
+    
+    def __contains__(self, model_name: str) -> bool:
+        """Check if model exists."""
+        return model_name in self._models

@@ -1,27 +1,27 @@
 """
-PlotEase: A simplified data visualization library for Python
+LightenPlot: A simplified data visualization library for Python
 
-PlotEase makes data visualization easy and intuitive, reducing the complexity
+LightenPlot makes data visualization easy and intuitive, reducing the complexity
 of matplotlib and ggplot while maintaining powerful features.
 
 Example:
-    >>> from plotease import PlotEase
+    >>> from lightenplot import LightenPlot 
     >>> import pandas as pd
     >>> 
     >>> data = pd.read_csv('data.csv')
-    >>> pe = PlotEase(data, theme='minimal')
+    >>> pe = LightenPlot(data, theme='minimal') 
     >>> pe.autoplot(target='price')
 """
 
 # Version information
 __version__ = '1.0.0'
-__author__ = 'PlotEase Team'
+__author__ = 'RichieClan' # Team name updated
 __email__ = 'your.email@example.com'
 __license__ = 'MIT'
 
 # Import main classes
 from .visualization import VisualizationBase
-from .plotease import PlotEase
+from .LigthenPlot import LightenPlot 
 from .diagnostic import DiagnosticPlotter
 from .summary import SummaryGenerator
 from .model_comp import ModelComparator
@@ -30,10 +30,10 @@ from .quick_plotter import QuickPlotter
 # Import utilities
 from . import utils
 
-# Define what gets imported with "from plotease import *"
+# Define what gets imported with "from lightenplot import *"
 __all__ = [
     # Main classes
-    'PlotEase',
+    'LightenPlot', # Class name updated
     'VisualizationBase',
     'DiagnosticPlotter',
     'SummaryGenerator',
@@ -49,26 +49,26 @@ __all__ = [
 
 # Package metadata
 PACKAGE_INFO = {
-    'name': 'plotease',
+    'name': 'lightenplot', 
     'version': __version__,
     'description': 'A simplified data visualization library for Python',
     'author': __author__,
     'email': __email__,
     'license': __license__,
-    'url': 'https://github.com/yourusername/plotease',
+    'url': 'https://github.com/Khassndrajayme/lightenplot', 
 }
 
 
 def get_version():
-    """Return the current version of PlotEase"""
+    """Return the current version of LightenPlot""" 
     return __version__
 
 
 def print_info():
     """Print package information"""
-    print(f"PlotEase v{__version__}")
+    print(f"LightenPlot v{__version__}") # Output updated
     print(f"Author: {__author__}")
     print(f"License: {__license__}")
-    print(f"Documentation: https://plotease.readthedocs.io/")
-  
-# print(f"PlotEase v{__version__} loaded successfully!")
+    print(f"Documentation: https://lightenplot.readthedocs.io/") # Documentation link updated
+ 
+# print(f"LightenPlot v{__version__} loaded successfully!") # Comment updated
