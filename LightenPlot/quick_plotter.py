@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Optional, List, Union
-from .visualization_base import VisualizationBase
+from .visualization import VisualizationBase
 
 
 class QuickPlotter(VisualizationBase):
@@ -21,18 +21,9 @@ class QuickPlotter(VisualizationBase):
     with minimal code and sensible defaults.
     """
     
-    def __init__(self, data: Optional[pd.DataFrame] = None, theme: str = 'default'):
-        """
-        Initialize QuickPlotter.
-        
-        Args:
-            data: Optional DataFrame
-            theme: Visual theme
-        """
-        # QuickPlotter can work without data since it uses static methods
-        if data is None:
-            data = pd.DataFrame()  # Empty DataFrame
-        super().__init__(data, theme)
+    def __init__(self, data: Optional[pd.DataFrame] = None, theme: str = 'default', **kwargs):
+        data = data if data is not None else pd.DataFrame()
+        super().__init__(data=data, theme=theme, **kwargs)
     
     def render(self) -> None:
         """

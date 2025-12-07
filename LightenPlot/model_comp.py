@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Dict, List, Optional, Union
-from .visualization_base import VisualizationBase
+from visualization import VisualizationBase
 
 
 class ModelComparator(VisualizationBase):
@@ -24,16 +24,9 @@ class ModelComparator(VisualizationBase):
         models (dict): Dictionary of model names and their metrics
     """
     
-    def __init__(self, models: Optional[Dict[str, Dict]] = None, theme: str = 'default'):
-        """
-        Initialize ModelComparator.
-        
-        Args:
-            models: Dictionary with model names as keys and metric dicts as values
-            theme: Visual theme to use
-        """
-        # ModelComparator doesn't require data, so we pass an empty DataFrame
-        super().__init__(pd.DataFrame(), theme)
+    def __init__(self, models: Optional[Dict[str, Dict]] = None, theme: str = 'default', **kwargs):
+        # We need to manually handle 'data' since it's not passed explicitly in the demo script
+        super().__init__(data=pd.DataFrame(), theme=theme, **kwargs)
         self._models = models if models is not None else {}
     
     def render(self) -> None:

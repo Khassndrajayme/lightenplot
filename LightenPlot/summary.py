@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Optional, List
-from .visualization_base import VisualizationBase
+from .visualization import VisualizationBase
 
 
 class SummaryGenerator(VisualizationBase):
@@ -24,15 +24,8 @@ class SummaryGenerator(VisualizationBase):
         data (pd.DataFrame): The data to summarize
     """
     
-    def __init__(self, data: pd.DataFrame, theme: str = 'default'):
-        """
-        Initialize SummaryGenerator with data.
-        
-        Args:
-            data: pandas DataFrame to summarize
-            theme: Visual theme to use
-        """
-        super().__init__(data, theme)
+    def __init__(self, data: pd.DataFrame, theme: str = 'default', **kwargs):
+        super().__init__(data=data, theme=theme, **kwargs)
     
     def render(self) -> None:
         """

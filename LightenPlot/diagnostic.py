@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Optional, List
 from scipy import stats
-from .visualization_base import VisualizationBase
+from .visualization import VisualizationBase
 
 
 class DiagnosticPlotter(VisualizationBase):
@@ -25,15 +25,8 @@ class DiagnosticPlotter(VisualizationBase):
         data (pd.DataFrame): The data to analyze
     """
     
-    def __init__(self, data: pd.DataFrame, theme: str = 'default'):
-        """
-        Initialize DiagnosticPlotter with data.
-        
-        Args:
-            data: pandas DataFrame to create diagnostics for
-            theme: Visual theme for plots
-        """
-        super().__init__(data, theme)
+    def __init__(self, data: pd.DataFrame, theme: str = 'default', **kwargs):
+        super().__init__(data=data, theme=theme, **kwargs)
     
     def render(self) -> None:
         """

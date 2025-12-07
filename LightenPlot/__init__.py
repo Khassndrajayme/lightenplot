@@ -1,43 +1,75 @@
 """
-LightenPlot - A Python Library for Easy Data Visualization
-==========================================================
+LightenPlot: A simplified data visualization library for Python
 
-LightenPlot provides an intuitive, object-oriented interface for creating
-beautiful data visualizations with minimal code.
-
-Main Classes:
-    - VisualizationBase: Abstract base class for all visualization components
-    - LightenPlot: Main interface for creating plots
-    - DiagnosticPlotter: Automated diagnostic plots for data analysis
-    - SummaryGenerator: Generate statistical summary visualizations
-    - ModelComparator: Compare multiple models visually
-    - QuickPlotter: Fast, one-line plotting utilities
+LightenPlot makes data visualization easy and intuitive, reducing the complexity
+of matplotlib and ggplot while maintaining powerful features.
 
 Example:
-    >>> from lightenplot import LightenPlot
+    >>> from lightenplot import LightenPlot 
     >>> import pandas as pd
     >>> 
-    >>> df = pd.read_csv('data.csv')
-    >>> plotter = LightenPlot(df)
-    >>> plotter.scatter('x_column', 'y_column', title='My Scatter Plot')
+    >>> data = pd.read_csv('data.csv')
+    >>> pe = LightenPlot(data, theme='minimal') 
+    >>> pe.autoplot(target='price')
 """
 
-__version__ = "0.1.0"
-__author__ = "Group 5: Jayme, Janog, Mahilum, Ventura, Zamoranos"
-__license__ = "MIT"
+# Version information
+__version__ = '1.0.0'
+__author__ = 'RichieClan' 
+__email__ = 'your.email@example.com'
+__license__ = 'MIT'
 
-from .visualization_base import VisualizationBase
-from .lightenplot import LightenPlot
-from .diagnostic_plotter import DiagnosticPlotter
-from .summary_generator import SummaryGenerator
-from .model_comparator import ModelComparator
+
+# Import main classes
+from .visualization import VisualizationBase
+from .LightenPlot import LightenPlot 
+from .diagnostic import DiagnosticPlotter
+from .summary import SummaryGenerator
+from .model_comp import ModelComparator
 from .quick_plotter import QuickPlotter
 
+# Import utilities
+from . import utils
+
+# Define what gets imported with "from lightenplot import *"
 __all__ = [
-    'VisualizationBase',
+    # Main classes
     'LightenPlot',
+    'VisualizationBase',
     'DiagnosticPlotter',
     'SummaryGenerator',
     'ModelComparator',
-    'QuickPlotter'
+    'QuickPlotter',
+    
+    # Utilities module
+    'utils',
+    
+    # Version info
+    '__version__',
 ]
+
+# Package metadata
+PACKAGE_INFO = {
+    'name': 'lightenplot', 
+    'version': __version__,
+    'description': 'A simplified data visualization library for Python',
+    'author': __author__,
+    'email': __email__,
+    'license': __license__,
+    'url': 'https://github.com/Khassndrajayme/lightenplot', 
+}
+
+
+def get_version():
+    """Return the current version of LightenPlot""" 
+    return __version__
+
+
+def print_info():
+    """Print package information"""
+    print(f"LightenPlot v{__version__}") # Output updated
+    print(f"Author: {__author__}")
+    print(f"License: {__license__}")
+    print(f"Documentation: https://lightenplot.readthedocs.io/") # Documentation link updated
+ 
+# print(f"LightenPlot v{__version__} loaded successfully!") # Comment updated

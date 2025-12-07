@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Optional, List, Union
-from .visualization_base import VisualizationBase
+from .visualization import VisualizationBase
 
 
 class LightenPlot(VisualizationBase):
@@ -24,15 +24,10 @@ class LightenPlot(VisualizationBase):
         data (pd.DataFrame): The data to visualize
     """
     
-    def __init__(self, data: pd.DataFrame, theme: str = 'default'):
-        """
-        Initialize LightenPlot with data.
-        
-        Args:
-            data: pandas DataFrame containing the data to plot
-            theme: Visual theme to use
-        """
-        super().__init__(data, theme)
+    def __init__(self, data: pd.DataFrame, theme: str = 'default', **kwargs):
+        """Initialize LightenPlot with data."""
+        # Pass data, theme, and all extra kwargs (like figsize) to parent
+        super().__init__(data=data, theme=theme, **kwargs)
     
     def render(self) -> None:
         """
