@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Optional, List, Union
-from .visualization_base import VisualizationBase
+from .visualization import VisualizationBase
 
 
 class QuickPlotter(VisualizationBase):
