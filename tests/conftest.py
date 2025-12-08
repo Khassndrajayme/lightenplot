@@ -1,4 +1,6 @@
-# tests/conftest.py
+import matplotlib
+matplotlib.use('Agg') 
+# ---------------------------------------------
 
 import pytest
 import matplotlib.pyplot as plt
@@ -15,4 +17,5 @@ def close_figures_after_test():
     yield
     
     # Teardown phase: This code runs AFTER the test completes
+    # This addresses the memory leak/figure warning.
     plt.close('all')
