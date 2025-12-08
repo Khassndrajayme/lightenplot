@@ -8,9 +8,22 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt  
 
+<<<<<<< HEAD
 from lightenplot import (
     ScatterPlot, LinePlot, BarPlot, HistogramPlot,
     BoxPlot, HeatmapPlot, PlotComposer, ThemeManager
+=======
+from LightenPlot import (
+<<<<<<< HEAD
+    LightenPlot, 
+=======
+    PlotEase, 
+>>>>>>> 55678793c86d4717dbf0b503e174704d98ef8bab
+    DiagnosticPlotter, 
+    SummaryGenerator, 
+    ModelComparator, 
+    QuickPlotter
+>>>>>>> eca2da73c6d6445bc8a5eec2c329a0afcf92bfb1
 )
 
 
