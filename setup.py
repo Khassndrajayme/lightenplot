@@ -13,7 +13,7 @@ with open('requirements.txt', encoding='utf-8') as f: # Added encoding='utf-8' f
     requirements = f.read().splitlines()
 
 setup(
-    name='lightenplot',
+    name='LightenPlot',
     version='0.1.0',
     author='Richieclan',
     author_email='khassandrajayme@gmail.com',
