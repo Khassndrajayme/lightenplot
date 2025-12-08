@@ -31,6 +31,10 @@ class ScatterPlot(BasePlot):
         Returns:
             self for method chaining
         """
+
+        self._create_args = (x, y)
+        self._create_kwargs = dict(color=color, size=size, alpha=alpha, **kwargs)
+
         if isinstance(self._data, pd.DataFrame):
             x_data = self._data[x] if isinstance(x, str) else x
             y_data = self._data[y] if isinstance(y, str) else y
@@ -83,6 +87,9 @@ class LinePlot(BasePlot):
         Returns:
             self for method chaining
         """
+        self._create_args = (x, y)
+        self._create_kwargs = dict(color=color, linewidth=linewidth, marker=marker, **kwargs)
+        
         if isinstance(self._data, pd.DataFrame):
             x_data = self._data[x] if isinstance(x, str) else x
             y_data = self._data[y] if isinstance(y, str) else y
@@ -124,6 +131,10 @@ class BarPlot(BasePlot):
         Returns:
             self for method chaining
         """
+        
+        self._create_args = (x, y)
+        self._create_kwargs = dict(color=color, horizontal=horizontal, **kwargs)
+
         if isinstance(self._data, pd.DataFrame):
             x_data = self._data[x] if isinstance(x, str) else x
             y_data = self._data[y] if isinstance(y, str) else y
@@ -164,6 +175,10 @@ class HistogramPlot(BasePlot):
         Returns:
             self for method chaining
         """
+
+        self._create_args = ()
+        self._create_kwargs = dict(column=column, data=data, bins=bins, color=color, edgecolor=edgecolor, **kwargs)
+
         if data is not None:
             plot_data = data
         elif isinstance(self._data, pd.DataFrame) and column:
@@ -192,6 +207,10 @@ class BoxPlot(BasePlot):
         Returns:
             self for method chaining
         """
+
+        self._create_args = ()
+        self._create_kwargs = dict(columns=columns, data=data, **kwargs)
+
         if data is not None:
             plot_data = data
         elif isinstance(self._data, pd.DataFrame) and columns:
@@ -234,6 +253,10 @@ class HeatmapPlot(BasePlot):
         Returns:
             self for method chaining
         """
+
+        self._create_args = ()
+        self._create_kwargs = dict(data=data, cmap=cmap, annot=annot, fmt=fmt, **kwargs)
+
         plot_data = data if data is not None else self._data
         
         sns.heatmap(plot_data, cmap=cmap, annot=annot, fmt=fmt, 
