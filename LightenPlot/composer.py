@@ -47,6 +47,10 @@ class PlotComposer:
                 plot_obj.ax = self.axes[idx]
                 plot_obj.figure = self.figure
                 plot_obj.create(*plot_obj._create_args, **plot_obj._create_kwargs)
+
+                if plot_obj._title:
+                    plot_obj.ax.set_title(plot_obj._title, fontsize=14, fontweight="bold")
+
         plt.tight_layout()
         return self
     
