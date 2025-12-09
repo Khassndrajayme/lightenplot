@@ -40,7 +40,7 @@ Lightenplot is a Python library that reduces complex visualization code into sin
 ## Installation
 
 ```bash
-pip install LightenPlot
+pip install lightenplot
 ```
 
 ### From Source
@@ -167,7 +167,7 @@ composer.show()
 
 ## Themes
 
-LightenPlot includes 4 built-in themes:
+Lightenplot includes 4 built-in themes:
 
 - `default`: Clean, professional look
 - `dark`: Dark mode with high contrast
