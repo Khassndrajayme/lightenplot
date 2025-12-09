@@ -4,7 +4,7 @@
 import unittest
 import numpy as np
 import pandas as pd
-from LightenPlot import (
+from lightenplot import (
     ScatterPlot, LinePlot, BarPlot, HistogramPlot,
     BoxPlot, HeatmapPlot, PlotComposer, ThemeManager
 )
