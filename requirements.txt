@@ -1,9 +1,15 @@
-# Core dependencies for PlotEase
-pandas>=1.3.0
+# Core dependencies for LightenPlot
+matplotlib>=3.5.0
 numpy>=1.21.0
-matplotlib>=3.4.0
+pandas>=1.3.0
 seaborn>=0.11.0
-scipy>=1.7.0
 
-# Optional but recommended
-typing-extensions>=4.0.0
+# Development dependencies (for testing)
+pytest>=7.0.0
+pytest-cov>=3.0.0
+
+# Build and publishing dependencies (for PyPI)
+build>=0.7.0
+twine>=4.0.0
+setuptools>=60.0.0
+wheel>=0.37.0

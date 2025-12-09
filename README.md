@@ -48,6 +48,7 @@ pip install lightenplot
 ```bash
 git clone https://github.com/khassndrajayme/lightenplot.git
 cd lightenplot
+pip install -r requirement.txt
 pip install -e .
 ```
 
