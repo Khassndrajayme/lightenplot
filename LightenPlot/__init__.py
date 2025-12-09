@@ -10,7 +10,7 @@ Example:
     >>> lp.scatter(data, x='age', y='salary').show()
     
 Author: RichieClan
-Version: 0.1.0
+Version: 0.3.0
 """
 
 __version__ = '0.1.0'
