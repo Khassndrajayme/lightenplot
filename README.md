@@ -23,7 +23,7 @@ Lightenplot is a Python library that reduces complex visualization code into sin
 * [Documentation](#documentation)
 * [Contributing](#contributing)
 * [RichieClan Team](#richieclan-team)
-* [License](#license)
+* [License](#LICENSE)
 * [Contact](#contact)
 
 
