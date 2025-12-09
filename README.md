@@ -6,7 +6,7 @@ LightenPlot is a Python library that reduces complex visualization code into sin
 
 [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![PyPI](https://img.shields.io/badge/pypi-lightenplot-orange.svg)](https://pypi.org/project/lightenplot/)
+[![PyPI](https://img.shields.io/badge/pypi-LightenPlot-orange.svg)](https://pypi.org/project/LightenPlot/)
 
 # **Table of Contents**
 
@@ -40,14 +40,14 @@ LightenPlot is a Python library that reduces complex visualization code into sin
 ## Installation
 
 ```bash
-pip install lightenplot
+pip install LightenPlot
 ```
 
 ### From Source
 
 ```bash
-git clone https://github.com/khassndrajayme/lightenplot.git
-cd lightenplot
+git clone https://github.com/khassndrajayme/LightenPlot.git
+cd LightenPlot
 pip install -r requirement.txt
 pip install -e .
 ```
@@ -74,17 +74,24 @@ plt.show()
 ### LightenPlot Way (1 line!)
 
 ```python
-import lightenplot as lp
+import LightenPlot as lp
+import pandas as pd
 
+data = pd.DataFrame({'x': [1, 2, 3], 'y': [4, 5, 6]})
 lp.scatter(data, x='x', y='y').set_title('My Scatter Plot').show()
 ```
+### PyPI Package:
+https://pypi.org/project/LightenPlot/
+
+lightenplot
+
 
 ## Examples
 
 ### Scatter Plot
 
 ```python
-import lightenplot as lp
+import LightenPlot as lp
 import pandas as pd
 
 data = pd.DataFrame({
@@ -184,7 +191,7 @@ print(lp.ThemeManager.list_themes())
 plot.save('output.png', dpi=300)
 
 # Multiple formats
-from lightenplot import PlotExporter
+from LightenPlot import PlotExporter
 exporter = PlotExporter(plot.figure)
 exporter.save_multiple('output', formats=['png', 'pdf', 'svg'])
 ```
@@ -267,20 +274,6 @@ Or with unittest:
 
 ```bash
 python -m unittest discover tests/
-```
-
-## Documentation
-
-Full documentation is available in the [docs](docs/) folder or can be generated using:
-
-```bash
-# Using pdoc
-pip install pdoc
-pdoc --html lightenplot
-
-# Using Sphinx
-cd docs/
-make html
 ```
 
 ## Contributing
