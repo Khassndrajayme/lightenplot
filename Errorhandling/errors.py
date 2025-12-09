@@ -35,7 +35,7 @@ class LightenPlotError(Exception):
     def _format_message(self) -> str:
         """Format error message with suggestion if available."""
         if self.suggestion:
-            return f"{self.message}\n💡 Suggestion: {self.suggestion}"
+            return f"{self.message}\n Suggestion: {self.suggestion}"
         return self.message
 
 
@@ -495,7 +495,7 @@ def create_error_report(error: Exception, include_traceback: bool = False) -> st
     if isinstance(error, LightenPlotError) and error.suggestion:
         report_lines.extend([
             "",
-            f"💡 Suggestion: {error.suggestion}",
+            f"Suggestion: {error.suggestion}",
         ])
     
     if include_traceback:
