@@ -51,6 +51,12 @@ class PlotComposer:
                 if plot_obj._title:
                     plot_obj.ax.set_title(plot_obj._title, fontsize=14, fontweight="bold")
 
+                if hasattr(plot_obj, '_xlabel') and plot_obj._xlabel:
+                    plot_obj.ax.set_xlabel(plot_obj._xlabel)
+                    
+                if hasattr(plot_obj, '_ylabel') and plot_obj._ylabel:
+                    plot_obj.ax.set_ylabel(plot_obj._ylabel)
+
         plt.tight_layout()
         return self
     
